@@ -1,4 +1,4 @@
-hidden-device
+hidden-server
 =============
 
-access devices sitting behind firewalls with unknown ip-address via reverse tunnel on demand.
+access server sitting behind firewalls with unknown ip-address via reverse tunnel on demand.
