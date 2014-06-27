@@ -77,7 +77,7 @@ HiddenServer.prototype.sendPingRequest = function(cb) {
       }
 
       var body = res.body || {};
-      if (body.state) self.state = body.state;
+      if (body.command) self.state = body.command;
       if (cb) cb(err, body);
       self.emit('httpResponse', body);
       debug('response body', res.statusCode, body);

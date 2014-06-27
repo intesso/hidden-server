@@ -53,10 +53,11 @@ app.get(settings.pingUri, function(req, res) {
   var state = req.params.state;
   debug('ping', req.url, name, state);
 
+  var message = {
+    state: state
+  };
   if (settings.keepOpen) {
-    saveRequest(pingRequests, name, req, {
-      state: state
-    }, settings.pingInterval);
+    saveRequest(pingRequests, name, req, message, settings.pingInterval);
   } else {
     handleRequest(commandRequests, name, res);
   }
@@ -66,22 +67,23 @@ app.get(settings.pingUri, function(req, res) {
 app.get(settings.commandUri, function(req, res) {
   var name = req.params.hiddenServerName;
   var command = req.params.command;
-  debug('command', req.url, name, command);
+  debug('command', req.url, name, command, !settings.keepOpen);
 
+  var message = {
+    command: command
+  };
   if (!settings.keepOpen) {
-    saveRequest(commandRequests, name, req, {
-      command: command
-    }, settings.pingInterval);
+    saveRequest(commandRequests, name, req, message, settings.pingInterval);
   } else {
-    handleRequest(pingRequests, name, res);
+    handleRequest(pingRequests, name, res, message);
   }
 });
-
 
 function saveRequest(requests, name, req, message, timeout) {
   debug('name', name);
   requests[name] = requests[name] || [];
   var obj = {};
+  obj.req = req;
   obj.message = (message) ? message : {};
   obj.id = (message.id) ? message.id : uuid();
 
@@ -90,25 +92,29 @@ function saveRequest(requests, name, req, message, timeout) {
   obj.handleTimeout = setTimeout(function() {
     req.res.json(jsonResponses.empty);
     var i = findRequest(requests, name, obj.id);
-    if (i > -1) requests[name].splice(i, 1);
-    debug('timeout delete req', obj.id, name, i, requests[name].length);
+    if (i < 0) return;
+    requests[name].splice(i, 1);
+    debug('timeout delete req', obj.id, name, i, requests);
+    debug('length', requests[name].length);
 
   }, (timeout * 1000));
 
   requests[name].push(obj);
 }
 
-function handleRequest(requests, name, res) {
-  var req = requests[name] ? requests[name].pop ? requests[name].pop() : undefined : undefined;
-  if (!req) return res.json(jsonResponses.empty);
+function handleRequest(requests, name, res, message) {
+  var stored = requests[name] ? requests[name].pop ? requests[name].pop() : undefined : undefined;
+  if (!stored) return res.json(jsonResponses.empty);
 
   // send response
-  var message = (req.message) ? req.message : {};
+  message = message || stored.message || {};
+  debug('send message', message);
   res.json(message);
+  stored.req.res.json(message);
 
   // remove saved request and clear timeout
-  if (req.handleTimeout) clearTimeout(req.handleTimeout);
-  delete requests[name];
+  if (stored.handleTimeout) clearTimeout(stored.handleTimeout);
+  //delete requests[name];
 }
 
 // returns index of element in array

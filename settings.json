@@ -1,6 +1,6 @@
 {
   "pingInterval" : 3,
-  "keepOpen": false,
+  "keepOpen": true,
   "requests": 3,
   "connectedTimeout": 3600,
   "noPingTimeout": 86400,
