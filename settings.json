@@ -1,0 +1,14 @@
+{
+  "pingInterval" : 3,
+  "keepOpen": false,
+  "requests": 3,
+  "connectedTimeout": 3600,
+  "noPingTimeout": 86400,
+  "publicServer": "http://localhost:3333",
+  "hiddenServerNames": ["server1", "server2"],
+  "hiddenServerName" : "server1",
+  "commands" : ["connect", "disconnect"],
+  "states": ["disconnect", "connect"],
+  "commandUri": "/command/:hiddenServerName/:command",
+  "pingUri": "/ping/:hiddenServerName/:state"
+}
