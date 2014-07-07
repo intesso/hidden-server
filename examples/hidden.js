@@ -1,2 +1,2 @@
-var HiddenServer = require('../hidden.js');
+var HiddenServer = require('../lib/hidden.js');
 var hidden = new HiddenServer().start();
