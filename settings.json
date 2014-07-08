@@ -1,14 +1,9 @@
 {
-  "pingInterval" : 3,
-  "keepOpen": true,
-  "requests": 3,
-  "connectedTimeout": 3600,
-  "noPingTimeout": 86400,
-  "publicServer": "http://localhost:3333",
-  "hiddenServerNames": ["server1", "server2"],
-  "hiddenServerName" : "server1",
-  "commands" : ["connect", "disconnect"],
-  "states": ["disconnect", "connect"],
+  "publicServer": "http://localhost:8080",
   "commandUri": "/command/:hiddenServerName/:command",
-  "pingUri": "/ping/:hiddenServerName/:state"
+  "pingUri": "/ping/:hiddenServerName/:state",
+  "hiddenServerName": "server1",
+  "pingInterval": 5,
+  "keepOpen": true,
+  "requests": 3
 }
