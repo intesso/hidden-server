@@ -1,14 +1,14 @@
-var HiddenServer = require('../lib/hidden.js');
+var HiddenServer = require('../index')('hidden');
 var hidden = new HiddenServer({
   publicServer: 'http://localhost:3000',
   pingUri: '/ping/:hiddenServerName/:state',
-  requests: 5,
+  simultaneousPings: 5,
   pingInterval: 5,
-  keepOpen: true,
+  keepPingOpen: true,
   hiddenServerName: 'server1'
 }).start();
 
 
-hidden.on('command', function(evt) {
-  console.log('command', evt);
+hidden.on('command', function(cmd) {
+  console.log('command', cmd);
 });

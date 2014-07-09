@@ -1,13 +1,13 @@
-var PublicServer = require('../lib/public.js');
-var ps = PublicServer({
+var PublicServer = require('../index')('public');
+var public = PublicServer({
   commandUri: '/command/:hiddenServerName/:command',
   pingUri: '/ping/:hiddenServerName/:state',
   pingInterval: 3,
-  keepOpen: true
+  keepPingOpen: true
 });
 
-ps.on('command', function(evt) {
-  console.log('command', evt);
+public.on('command', function(cmd) {
+  console.log('command', cmd);
 });
 
-ps.app.listen(3000);
+public.app.listen(3000);
