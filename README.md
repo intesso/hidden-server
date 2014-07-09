@@ -75,3 +75,6 @@ when a `command` request by the client was successful, both ends (`public` and `
   ```shell
   curl localhost:3000/command/server1/newCommand
   ```
+
+## license
+[MIT License](LICENSE)
