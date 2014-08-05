@@ -5,8 +5,22 @@ var hidden = new HiddenServer({
   simultaneousPings: 5,
   pingInterval: 5,
   keepPingOpen: true,
-  hiddenServerName: 'server1'
+  roundTripResponse: true,
+  hiddenServerName: 'server1',
+  onCommand: onCommand,
+  onHttpResponse: undefined,
+  onError: undefined
 }).start();
+
+function onCommand(cmd, cb) {
+  setTimeout(function(cmd) {
+    console.log('onCommand', cmd);
+    cb({
+      command: cmd,
+      custom: true
+    });
+  }, 1000);
+}
 
 
 hidden.on('command', function(cmd) {

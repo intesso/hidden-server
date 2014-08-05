@@ -24,6 +24,92 @@ after the `public` server could respond to an incomming ping request from the `h
 
 when a `command` request by the client was successful, both ends (`public` and `hidden`) receive a `command` event.
 
+ah and yes, you can have as many `hidden` servers as you like and connect them to a single `public` server.
+the `client` can decide with wich `hidden` server it want's to talk.
+
+## scenarios
+
+###rough description
+  1. Request: hidden server -> public server: /ping/:hiddenServerName/:state
+  2.   keep ping open, no response before timeout or command request (3)
+       <- Response (1): {hiddenServerName, command}
+       continuously repeat Step 1 and 2
+  3. Request: client -> public server: /command/:hiddenServerName/:command
+  2.   <- Response (1): {hiddenServerName, command}
+  4.   <- Response (3): {state}
+
+
+
+###Scenario: keepPingOpen and roundTripResponse
+  - `+` fast, deterministic command response time
+  - `-` many open ports on `public-server` with many `hidden-servers`
+
+
+    +--------+                   +--------+                     +--------+
+    | Client |                   | Public |                     | Hidden |
+    +----+---+                   +----+---+                     +----+---+
+         |                            |             Ping             |
+         |                            | <--------------------------+ |
+         |                            | |                            |
+         |                            | | keepPingOpen               |
+         |                            | |                            |
+         |                            | |         Response           |
+         |                            | +--------------------------> |
+         |                            |                              |
+         |                            |             Ping             |
+         |                            | <--------------------------+ |
+         |          Command           | |                            |
+         | +------------------------> | |         Response           |
+         |                          | | +--------------------------> | +---->
+         |                          | |                              |      |  handleRequest
+         |                          | |             Ping             |      |
+         |          Response        | | <--------------------------+ | <----v
+         | <------------------------v | |                            |
+         |                            | | keepPingOpen               |
+         |                            | |                            |
+         |                            | |         Response           |
+         |                            | +--------------------------> |
+         |                            |                              |
+         |                            |                              |
+         +                            +                              +
+
+
+
+###Scenario: roundTripResponse
+ - `+` Advantage: no open ports on `public-server`
+ - `-` Disadvantage: long, non deterministic command response time
+
+
+     +--------+                   +--------+                     +--------+
+     | Client |                   | Public |                     | Hidden |
+     +----+---+                   +----+---+                     +----+---+
+          |                            |             Ping             |
+          |                            | <--------------------------+ | +
+          |                            | +--------------------------> | |
+          |                            |           Response           | | pingInterval
+          |                            |                              | |
+          |                            |                              | |
+          |                            |             Ping             | v
+          |                            | <--------------------------+ |
+          |                            | +--------------------------> | +
+          |                            |           Response           | |
+          |          Command           |                              | | pingInterval
+          | +------------------------> |                              | |
+          |                          | |                              | |
+          |                          | |             Ping             | v
+          |                          | | <--------------------------+ |
+          |                          | | +--------------------------> | +---->
+          |                          | |           Response           |      | handleRequest
+          |                          | |             Ping             |      |
+          |                          | | <--------------------------+ | <----v
+          |          Response        | | +--------------------------> |
+          | <------------------------v |           Response           |
+          |                            |                              |
+          |                            |                              |
+          +                            +                              +
+
+diagrams created with [asciiflow](http://asciiflow.com/)
+
 
 ## install
 
@@ -33,7 +119,7 @@ when a `command` request by the client was successful, both ends (`public` and `
 
 ##usage
 
-### client
+### hidden
 
   ```javascript
   var HiddenServer = require('hidden-server')('hidden');
