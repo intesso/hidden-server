@@ -9,15 +9,15 @@ var command = userArgs[0];
 // get url right
 var url = settings.publicServer + settings.commandUri;
 url = url.replace(':hiddenServerName', settings.hiddenServerName)
-url = url.replace(':command', command);
 console.log('url', url);
 
 /// send the request
 request
-  .get(url)
+  .post(url)
+  .send({command:'newCommand'})
   .end(function(err, res) {
     console.log('result', url, err, res);
   });
 
 /// alternative client command call
-// curl localhost:3000/command/server1/newCommand
+curl -H "Content-Type: application/json" -d '{"command":"newCommand","additional":"mää"}' localhost:3000/command/server1

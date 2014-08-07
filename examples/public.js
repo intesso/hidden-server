@@ -1,7 +1,7 @@
 var PublicServer = require('../index')('public');
 var public = PublicServer({
-  commandUri: '/command/:hiddenServerName/:command',
-  pingUri: '/ping/:hiddenServerName/:state',
+  commandUri: '/command/:hiddenServerName',
+  pingUri: '/ping/:hiddenServerName',
   pingInterval: 3,
   keepPingOpen: true
 });

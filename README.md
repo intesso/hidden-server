@@ -12,7 +12,7 @@ the `hidden-server` consists of three parts: `client` --command--> `public` <--p
 
 
 
-it uses `http GET` only. the `hidden` server sends out ping messages to the `publicServer` at the given `pingInterval`.
+it uses `http POST` only. the `hidden` server sends out ping messages to the `publicServer` at the given `pingInterval`.
 in order to allow simultaneous user access, `simultaneousPings` are sent by the `hidden` server.
 
 
