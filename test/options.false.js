@@ -1,4 +1,4 @@
-describe('options.keepPingOpen-roundTripResponse.js', function() {
+describe('options.false.js', function() {
   it('should respond with answer from hidden-server', function(done) {
     this.timeout(TEST_TIMEOUT);
 
@@ -8,8 +8,8 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
     });
 
     /* settings */
-    var PORT = 3001;
-    var TEST_TIMEOUT = 2000;
+    var PORT = 3000;
+    var TEST_TIMEOUT = 5000;
     var TEST_WAIT = 0;
 
     var settings = {
@@ -18,8 +18,8 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
       pingUri: '/ping/:hiddenServerName',
       simultaneousPings: 5,
       pingInterval: 0.5,
-      keepPingOpen: true,
-      roundTripResponse: true,
+      keepPingOpen: false,
+      roundTripResponse: false,
       hiddenServerName: 'server1'
     };
 
@@ -28,16 +28,7 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
     var HiddenServer = require('../index')('hidden');
     var hidden = new HiddenServer(settings).start();
 
-    hidden.on('command', function(obj, cb) {
-      // simulate async response
-      setTimeout(function() {
-        // add a new response attribute to the message object
-        obj.response = Math.random();
-        // modify the original command message attribute
-        obj.command = obj.command + "What?";
-        if (cb) cb(obj);
-      }, 0);
-    });
+    hidden.on('command', function(obj, cb) {});
 
     /* public-server */
     var PublicServer = require('../index')('public');
@@ -61,21 +52,17 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
     var request = require('superagent');
     var assert = require('assert');
 
-
     setTimeout(function() {
       request
         .post(url)
         .send({
-          command: 'options.keepPingOpen-roundTripResponse'
+          command: 'false'
         })
         .end(function(err, res) {
           if (err) return done(err);
           var obj = res.body;
-          assert(obj.id, 'id does not exist');
           assert(obj.command, 'command does not exist');
-          assert.equal(obj.command, 'options.keepPingOpen-roundTripResponseWhat?');
-          assert(obj.response, 'response does not exist');
-          assert.equal(res.text.match(/command/).length, 1);
+          assert.equal(obj.command, 'false');
           publicServer.close(function() {
             done();
           });

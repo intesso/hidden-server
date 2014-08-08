@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "description": "access server sitting behind firewalls with unknown ip-address via reverse tunnel on demand.",
   "author": "Andi Neck <andi.neck@intesso.com>",
-  "contributors": [{
-    "name": "Andi Neck",
-    "email": "andi.neck@intesso.com"
-  }],
+  "contributors": [
+    {
+      "name": "Andi Neck",
+      "email": "andi.neck@intesso.com"
+    }
+  ],
   "keywords": [
     "reverse tunnel",
     "dynamic tunnel",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "supertest": "~0.13.0",
-    "mocha": "~1.21.4"
+    "mocha": "~1.21.4",
+    "debug-trace": "~0.2.3"
   }
 }

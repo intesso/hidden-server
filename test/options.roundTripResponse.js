@@ -1,4 +1,4 @@
-describe('options.keepPingOpen-roundTripResponse.js', function() {
+describe('options.roundTripResponse.js', function() {
   it('should respond with answer from hidden-server', function(done) {
     this.timeout(TEST_TIMEOUT);
 
@@ -8,7 +8,7 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
     });
 
     /* settings */
-    var PORT = 3001;
+    var PORT = 3004;
     var TEST_TIMEOUT = 2000;
     var TEST_WAIT = 0;
 
@@ -18,7 +18,7 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
       pingUri: '/ping/:hiddenServerName',
       simultaneousPings: 5,
       pingInterval: 0.5,
-      keepPingOpen: true,
+      keepPingOpen: false,
       roundTripResponse: true,
       hiddenServerName: 'server1'
     };
@@ -29,9 +29,11 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
     var hidden = new HiddenServer(settings).start();
 
     hidden.on('command', function(obj, cb) {
+      console.log('commander');
       // simulate async response
       setTimeout(function() {
         // add a new response attribute to the message object
+        console.log('commander setTimeout');
         obj.response = Math.random();
         // modify the original command message attribute
         obj.command = obj.command + "What?";
@@ -66,14 +68,14 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
       request
         .post(url)
         .send({
-          command: 'options.keepPingOpen-roundTripResponse'
+          command: 'options.roundTripResponse'
         })
         .end(function(err, res) {
           if (err) return done(err);
           var obj = res.body;
           assert(obj.id, 'id does not exist');
           assert(obj.command, 'command does not exist');
-          assert.equal(obj.command, 'options.keepPingOpen-roundTripResponseWhat?');
+          assert.equal(obj.command, 'options.roundTripResponseWhat?');
           assert(obj.response, 'response does not exist');
           assert.equal(res.text.match(/command/).length, 1);
           publicServer.close(function() {
