@@ -1,6 +1,10 @@
 // import dependencies
 var request = require('superagent');
-var settings = require('../settings.json');
+var settings = {
+  publicServer: 'http://localhost:3000',
+  commandUri: '/command/:hiddenServerName',
+  hiddenServerName: 'server1'
+};
 
 // read the commandline command argument
 var userArgs = process.argv.slice(2);
@@ -16,8 +20,9 @@ request
   .post(url)
   .send({command:'newCommand'})
   .end(function(err, res) {
-    console.log('result', url, err, res);
+    if (err) return console.error(err);
+    console.log('result', url, res.text, res.body);
   });
 
 /// alternative client command call
-curl -H "Content-Type: application/json" -d '{"command":"newCommand","additional":"mää"}' localhost:3000/command/server1
+// curl -H "Content-Type: application/json" -d '{"command":"newCommand","additional":"mää"}' localhost:3000/command/server1

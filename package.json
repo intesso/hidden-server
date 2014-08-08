@@ -7,6 +7,17 @@
     "name": "Andi Neck",
     "email": "andi.neck@intesso.com"
   }],
+  "keywords": [
+    "reverse tunnel",
+    "dynamic tunnel",
+    "hidden device",
+    "hidden server"
+  ],
+  "repository": "git://github.com/intesso/hidden-server",
+  "main": "index",
+  "engines": {
+    "node": "*"
+  },
   "dependencies": {
     "express": "~4.2.0",
     "static-favicon": "~1.0.0",
@@ -19,15 +30,8 @@
     "superagent": "~0.18.0",
     "configurable": "0.0.1"
   },
-  "keywords": [
-    "reverse tunnel",
-    "dynamic tunnel",
-    "hidden device",
-    "hidden server"
-  ],
-  "repository": "git://github.com/intesso/hidden-server",
-  "main": "index",
-  "engines": {
-    "node": "*"
+  "devDependencies": {
+    "supertest": "~0.13.0",
+    "mocha": "~1.21.4"
   }
 }

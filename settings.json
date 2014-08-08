@@ -1,10 +1,10 @@
 {
-  "publicServer": "http://localhost:8080",
+  "publicServer": "http://localhost:3000",
   "commandUri": "/command/:hiddenServerName",
   "pingUri": "/ping/:hiddenServerName",
   "hiddenServerName": "server1",
   "simultaneousPings": 3,
   "pingInterval": 5,
   "keepPingOpen": true,
-  "roundTripResponse": false
+  "roundTripResponse": true
 }
