@@ -3,6 +3,7 @@ describe('options.keepPingOpen.js', function() {
     this.timeout(TEST_TIMEOUT);
 
     /* dependencies */
+    var debug = require('debug')('test:debug');
     require('debug-trace')({
       always: true,
     });
@@ -59,6 +60,7 @@ describe('options.keepPingOpen.js', function() {
           command: 'open'
         })
         .end(function(err, res) {
+          debug('clientResponse', err, res.body);
           if (err) return done(err);
           var obj = res.body;
           assert(obj.command, 'command does not exist');

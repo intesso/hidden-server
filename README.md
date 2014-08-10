@@ -125,32 +125,34 @@ diagrams created with [asciiflow](http://asciiflow.com/)
   var HiddenServer = require('hidden-server')('hidden');
   var hidden = new HiddenServer({
     publicServer: 'http://localhost:3000',
-    pingUri: '/ping/:hiddenServerName/:state',
+    pingUri: '/ping/:hiddenServerName',
     simultaneousPings: 5,
-    pingInterval: 5,
+    pingInterval: 3,
     keepPingOpen: true,
+    roundTripResponse: false,
     hiddenServerName: 'server1'
   }).start();
 
 
-  hidden.on('command', function(cmd) {
-    console.log('command', cmd);
+  hidden.on('command', function(obj) {
+    console.log('command', obj);
   });
   ```
 
 ### public
 
   ```javascript
-  var PublicServer = require('../index')('public');
+  var PublicServer = require('hidden-server')('public');
   var public = PublicServer({
-    commandUri: '/command/:hiddenServerName/:command',
-    pingUri: '/ping/:hiddenServerName/:state',
+    commandUri: '/command/:hiddenServerName',
+    pingUri: '/ping/:hiddenServerName',
     pingInterval: 3,
-    keepPingOpen: true
+    keepPingOpen: true,
+    roundTripResponse: false
   });
 
-  public.on('command', function(cmd) {
-    console.log('command', cmd);
+  public.on('command', function(obj) {
+    console.log('command', obj);
   });
 
   public.app.listen(3000);

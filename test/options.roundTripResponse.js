@@ -3,6 +3,7 @@ describe('options.roundTripResponse.js', function() {
     this.timeout(TEST_TIMEOUT);
 
     /* dependencies */
+    var debug = require('debug')('test:debug');
     require('debug-trace')({
       always: true,
     });
@@ -29,11 +30,9 @@ describe('options.roundTripResponse.js', function() {
     var hidden = new HiddenServer(settings).start();
 
     hidden.on('command', function(obj, cb) {
-      console.log('commander');
       // simulate async response
       setTimeout(function() {
         // add a new response attribute to the message object
-        console.log('commander setTimeout');
         obj.response = Math.random();
         // modify the original command message attribute
         obj.command = obj.command + "What?";
@@ -71,17 +70,19 @@ describe('options.roundTripResponse.js', function() {
           command: 'options.roundTripResponse'
         })
         .end(function(err, res) {
+          debug('clientResponse', err, res.body);
           if (err) return done(err);
           var obj = res.body;
-
           assert(obj.command, 'command does not exist');
           assert(obj.id, 'id does not exist');
           assert.equal(obj.command, 'options.roundTripResponseWhat?');
           assert(obj.response, 'response does not exist');
           assert.equal(res.text.match(/command/).length, 1);
-          publicServer.close(function() {
-            done();
-          });
+          done();
+          // server only closes after the next pings
+          // publicServer.close(function() {
+          //   done();
+          // });
         })
     }, TEST_WAIT);
 

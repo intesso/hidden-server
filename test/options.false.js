@@ -3,12 +3,13 @@ describe('options.false.js', function() {
     this.timeout(TEST_TIMEOUT);
 
     /* dependencies */
+    var debug = require('debug')('test:debug');
     require('debug-trace')({
       always: true,
     });
 
     /* settings */
-    var PORT = 3000;
+    var PORT = 3001;
     var TEST_TIMEOUT = 5000;
     var TEST_WAIT = 0;
 
@@ -59,6 +60,7 @@ describe('options.false.js', function() {
           command: 'false'
         })
         .end(function(err, res) {
+          debug('clientResponse', err, res.body);
           if (err) return done(err);
           var obj = res.body;
           assert(obj.command, 'command does not exist');

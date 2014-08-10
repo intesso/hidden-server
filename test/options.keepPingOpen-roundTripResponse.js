@@ -3,13 +3,14 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
     this.timeout(TEST_TIMEOUT);
 
     /* dependencies */
+    var debug = require('debug')('test:debug');
     require('debug-trace')({
       always: true,
     });
 
     /* settings */
-    var PORT = 3001;
-    var TEST_TIMEOUT = 2000;
+    var PORT = 3002;
+    var TEST_TIMEOUT = 5000;
     var TEST_WAIT = 0;
 
     var settings = {
@@ -17,7 +18,7 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
       commandUri: '/command/:hiddenServerName',
       pingUri: '/ping/:hiddenServerName',
       simultaneousPings: 5,
-      pingInterval: 0.5,
+      pingInterval: 2,
       keepPingOpen: true,
       roundTripResponse: true,
       hiddenServerName: 'server1'
@@ -69,6 +70,7 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
           command: 'options.keepPingOpen-roundTripResponse'
         })
         .end(function(err, res) {
+          debug('clientResponse', err, res.body);
           if (err) return done(err);
           var obj = res.body;
           assert(obj.id, 'id does not exist');
@@ -76,9 +78,11 @@ describe('options.keepPingOpen-roundTripResponse.js', function() {
           assert.equal(obj.command, 'options.keepPingOpen-roundTripResponseWhat?');
           assert(obj.response, 'response does not exist');
           assert.equal(res.text.match(/command/).length, 1);
-          publicServer.close(function() {
-            done();
-          });
+          done();
+          // server only closes after the next pings
+          // publicServer.close(function() {
+          //   done();
+          // });
         })
     }, TEST_WAIT);
 
