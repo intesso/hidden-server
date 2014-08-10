@@ -9,14 +9,14 @@ describe('options.roundTripResponse.js', function() {
 
     /* settings */
     var PORT = 3004;
-    var TEST_TIMEOUT = 2000;
+    var TEST_TIMEOUT = 5000;
     var TEST_WAIT = 0;
 
     var settings = {
       publicServer: 'http://localhost:' + PORT,
       commandUri: '/command/:hiddenServerName',
       pingUri: '/ping/:hiddenServerName',
-      simultaneousPings: 5,
+      simultaneousPings: 3,
       pingInterval: 0.5,
       keepPingOpen: false,
       roundTripResponse: true,
@@ -73,8 +73,9 @@ describe('options.roundTripResponse.js', function() {
         .end(function(err, res) {
           if (err) return done(err);
           var obj = res.body;
-          assert(obj.id, 'id does not exist');
+
           assert(obj.command, 'command does not exist');
+          assert(obj.id, 'id does not exist');
           assert.equal(obj.command, 'options.roundTripResponseWhat?');
           assert(obj.response, 'response does not exist');
           assert.equal(res.text.match(/command/).length, 1);
