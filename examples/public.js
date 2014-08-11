@@ -11,4 +11,7 @@ public.on('command', function(obj) {
   console.log('command', obj);
 });
 
-public.app.listen(3000);
+public.listen(3000);
+
+// or with an existing express app:
+// app.use(public.app);

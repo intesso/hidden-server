@@ -28,21 +28,11 @@ ah and yes, you can have as many `hidden` servers as you like and connect them t
 the `client` can decide with wich `hidden` server it want's to talk.
 
 ## scenarios
-
-###rough description
-  1. Request: hidden server -> public server: /ping/:hiddenServerName/:state
-  2.   keep ping open, no response before timeout or command request (3)
-       <- Response (1): {hiddenServerName, command}
-       continuously repeat Step 1 and 2
-  3. Request: client -> public server: /command/:hiddenServerName/:command
-  2.   <- Response (1): {hiddenServerName, command}
-  4.   <- Response (3): {state}
-
-
+The following scenarios describe the combinations with the options: `keepPingOpen` and `roundTripResponse`
 
 ###Scenario: keepPingOpen and roundTripResponse
-  - `+` fast, deterministic command response time
-  - `-` many open ports on `public-server` with many `hidden-servers`
+  - `+` Advantage: fast, deterministic command response time / feedback from `hidden-server`
+  - `-` Disadvantage: many open ports on `public-server` with many `hidden-servers`
 
 
     +--------+                   +--------+                     +--------+
@@ -54,13 +44,13 @@ the `client` can decide with wich `hidden` server it want's to talk.
          |                            | | keepPingOpen               |
          |                            | |                            |
          |                            | |         Response           |
-         |                            | +--------------------------> |
+         |                            | v--------------------------> |
          |                            |                              |
          |                            |             Ping             |
          |                            | <--------------------------+ |
          |          Command           | |                            |
          | +------------------------> | |         Response           |
-         |                          | | +--------------------------> | +---->
+         |                          | | v--------------------------> | +---->
          |                          | |                              |      |  handleRequest
          |                          | |             Ping             |      |
          |          Response        | | <--------------------------+ | <----v
@@ -68,7 +58,7 @@ the `client` can decide with wich `hidden` server it want's to talk.
          |                            | | keepPingOpen               |
          |                            | |                            |
          |                            | |         Response           |
-         |                            | +--------------------------> |
+         |                            | v--------------------------> |
          |                            |                              |
          |                            |                              |
          +                            +                              +
@@ -76,7 +66,7 @@ the `client` can decide with wich `hidden` server it want's to talk.
 
 
 ###Scenario: roundTripResponse
- - `+` Advantage: no open ports on `public-server`
+ - `+` Advantage: no open ports on `public-server` / feedback from `hidden-server`
  - `-` Disadvantage: long, non deterministic command response time
 
 
@@ -85,28 +75,95 @@ the `client` can decide with wich `hidden` server it want's to talk.
      +----+---+                   +----+---+                     +----+---+
           |                            |             Ping             |
           |                            | <--------------------------+ | +
-          |                            | +--------------------------> | |
+          |                            | v--------------------------> | |
           |                            |           Response           | | pingInterval
           |                            |                              | |
           |                            |                              | |
           |                            |             Ping             | v
           |                            | <--------------------------+ |
-          |                            | +--------------------------> | +
+          |                            | v--------------------------> | +
           |                            |           Response           | |
           |          Command           |                              | | pingInterval
           | +------------------------> |                              | |
           |                          | |                              | |
           |                          | |             Ping             | v
           |                          | | <--------------------------+ |
-          |                          | | +--------------------------> | +---->
+          |                          | | v--------------------------> | +---->
           |                          | |           Response           |      | handleRequest
           |                          | |             Ping             |      |
           |                          | | <--------------------------+ | <----v
-          |          Response        | | +--------------------------> |
+          |          Response        | | v--------------------------> |
           | <------------------------v |           Response           |
           |                            |                              |
           |                            |                              |
           +                            +                              +
+
+
+###Scenario: keepPingOpen
+- `+` Advantage: fast, deterministic command response time,
+- `-` Disadvantage: no feedback from hidden-server / many open ports on `public-server` with many `hidden-servers`
+
+
+    +--------+                   +--------+                     +--------+
+    | Client |                   | Public |                     | Hidden |
+    +----+---+                   +----+---+                     +----+---+
+         |                            |             Ping             |
+         |                            | <--------------------------+ |
+         |                            | |                            |
+         |                            | | keepPingOpen               |
+         |                            | |                            |
+         |                            | |         Response           |
+         |                            | v--------------------------> |
+         |                            |                              |
+         |                            |             Ping             |
+         |                            | <--------------------------+ |
+         |                            | |                            |
+         |          Command           | |         Response           |
+         | +------------------------> | v--------------------------> |
+         |          Response        | |                              |
+         | <------------------------v |             Ping             |
+         |                            | <--------------------------+ |
+         |                            | |                            |
+         |                            | | keepPingOpen               |
+         |                            | |                            |
+         |                            | |         Response           |
+         |                            | v--------------------------> |
+         |                            |                              |
+         |                            |                              |
+         +                            +                              +
+
+
+
+###Scenario: no Options
+- `+` Advantage: not many... simple :-) ... no open ports on `public-server`
+- `-` Disadvantage: long, non deterministic command response time / no feedback from hidden-server
+
+
+    +--------+                   +--------+                     +--------+
+    | Client |                   | Public |                     | Hidden |
+    +----+---+                   +----+---+                     +----+---+
+         |                            |             Ping             |
+         |                            | <--------------------------+ | +
+         |                            | v--------------------------> | |
+         |                            |           Response           | | pingInterval
+         |                            |                              | |
+         |                            |                              | v
+         |                            |             Ping             |
+         |                            | <--------------------------+ | +
+         |                            | v--------------------------> | |
+         |          Command           |           Response           | | pingInterval
+         | +------------------------> |                              | |
+         |                          | |                              | v
+         |                          | |             Ping             |
+         |          Response        | | <--------------------------+ | +
+         | <------------------------v | v--------------------------> | |
+         |                            |           Response           | | pingInterval
+         |                            |                              | |
+         |                            |                              | v
+         |                            |                              |
+         |                            |                              |
+         +                            +                              +
+
 
 diagrams created with [asciiflow](http://asciiflow.com/)
 
@@ -155,7 +212,7 @@ diagrams created with [asciiflow](http://asciiflow.com/)
     console.log('command', obj);
   });
 
-  public.app.listen(3000);
+  public.listen(3000);
   ```
 
 ### client

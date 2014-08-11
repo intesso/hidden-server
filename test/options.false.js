@@ -37,7 +37,7 @@ describe('options.false.js', function() {
 
     public.on('command', function(cmd) {});
 
-    var publicServer = public.app.listen(PORT);
+    var publicServer = public.listen(PORT);
 
 
     /* client */
