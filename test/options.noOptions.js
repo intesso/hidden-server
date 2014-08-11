@@ -1,4 +1,4 @@
-describe('options.false.js', function() {
+describe('options.noOptions.js', function() {
   it('should respond with answer from hidden-server', function(done) {
     this.timeout(TEST_TIMEOUT);
 
@@ -57,14 +57,14 @@ describe('options.false.js', function() {
       request
         .post(url)
         .send({
-          command: 'false'
+          command: 'noOptions'
         })
         .end(function(err, res) {
           debug('clientResponse', err, res.body);
           if (err) return done(err);
           var obj = res.body;
           assert(obj.command, 'command does not exist');
-          assert.equal(obj.command, 'false');
+          assert.equal(obj.command, 'noOptions');
           publicServer.close(function() {
             done();
           });
