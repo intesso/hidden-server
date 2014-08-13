@@ -34,136 +34,136 @@ The following scenarios describe the combinations with the options: `keepPingOpe
   - `+` Advantage: fast, deterministic command response time / feedback from `hidden-server`
   - `-` Disadvantage: many open ports on `public-server` with many `hidden-servers`
 
-
-    +--------+                   +--------+                     +--------+
-    | Client |                   | Public |                     | Hidden |
-    +----+---+                   +----+---+                     +----+---+
-         |                            |             Ping             |
-         |                            | <--------------------------+ |
-         |                            | |                            |
-         |                            | | keepPingOpen               |
-         |                            | |                            |
-         |                            | |         Response           |
-         |                            | v--------------------------> |
-         |                            |                              |
-         |                            |             Ping             |
-         |                            | <--------------------------+ |
-         |          Command           | |                            |
-         | +------------------------> | |         Response           |
-         |                          | | v--------------------------> | +---->
-         |                          | |                              |      |  handleRequest
-         |                          | |             Ping             |      |
-         |          Response        | | <--------------------------+ | <----v
-         | <------------------------v | |                            |
-         |                            | | keepPingOpen               |
-         |                            | |                            |
-         |                            | |         Response           |
-         |                            | v--------------------------> |
-         |                            |                              |
-         |                            |                              |
-         +                            +                              +
-
+```
++--------+                   +--------+                     +--------+
+| Client |                   | Public |                     | Hidden |
++----+---+                   +----+---+                     +----+---+
+     |                            |             Ping             |
+     |                            | <--------------------------+ |
+     |                            | |                            |
+     |                            | | keepPingOpen               |
+     |                            | |                            |
+     |                            | |         Response           |
+     |                            | v--------------------------> |
+     |                            |                              |
+     |                            |             Ping             |
+     |                            | <--------------------------+ |
+     |          Command           | |                            |
+     | +------------------------> | |         Response           |
+     |                          | | v--------------------------> | +---->
+     |                          | |                              |      |  handleRequest
+     |                          | |             Ping             |      |
+     |          Response        | | <--------------------------+ | <----v
+     | <------------------------v | |                            |
+     |                            | | keepPingOpen               |
+     |                            | |                            |
+     |                            | |         Response           |
+     |                            | v--------------------------> |
+     |                            |                              |
+     |                            |                              |
+     +                            +                              +
+```
 
 
 ###Scenario: roundTripResponse
  - `+` Advantage: no open ports on `public-server` / feedback from `hidden-server`
  - `-` Disadvantage: long, non deterministic command response time
 
-
-     +--------+                   +--------+                     +--------+
-     | Client |                   | Public |                     | Hidden |
-     +----+---+                   +----+---+                     +----+---+
-          |                            |             Ping             |
-          |                            | <--------------------------+ | +
-          |                            | v--------------------------> | |
-          |                            |           Response           | | pingInterval
-          |                            |                              | |
-          |                            |                              | |
-          |                            |             Ping             | v
-          |                            | <--------------------------+ |
-          |                            | v--------------------------> | +
-          |                            |           Response           | |
-          |          Command           |                              | | pingInterval
-          | +------------------------> |                              | |
-          |                          | |                              | |
-          |                          | |             Ping             | v
-          |                          | | <--------------------------+ |
-          |                          | | v--------------------------> | +---->
-          |                          | |           Response           |      | handleRequest
-          |                          | |             Ping             |      |
-          |                          | | <--------------------------+ | <----v
-          |          Response        | | v--------------------------> |
-          | <------------------------v |           Response           |
-          |                            |                              |
-          |                            |                              |
-          +                            +                              +
-
+```
+ +--------+                   +--------+                     +--------+
+ | Client |                   | Public |                     | Hidden |
+ +----+---+                   +----+---+                     +----+---+
+      |                            |             Ping             |
+      |                            | <--------------------------+ | +
+      |                            | v--------------------------> | |
+      |                            |           Response           | | pingInterval
+      |                            |                              | |
+      |                            |                              | |
+      |                            |             Ping             | v
+      |                            | <--------------------------+ |
+      |                            | v--------------------------> | +
+      |                            |           Response           | |
+      |          Command           |                              | | pingInterval
+      | +------------------------> |                              | |
+      |                          | |                              | |
+      |                          | |             Ping             | v
+      |                          | | <--------------------------+ |
+      |                          | | v--------------------------> | +---->
+      |                          | |           Response           |      | handleRequest
+      |                          | |             Ping             |      |
+      |                          | | <--------------------------+ | <----v
+      |          Response        | | v--------------------------> |
+      | <------------------------v |           Response           |
+      |                            |                              |
+      |                            |                              |
+      +                            +                              +
+```
 
 ###Scenario: keepPingOpen
 - `+` Advantage: fast, deterministic command response time,
 - `-` Disadvantage: no feedback from hidden-server / many open ports on `public-server` with many `hidden-servers`
 
-
-    +--------+                   +--------+                     +--------+
-    | Client |                   | Public |                     | Hidden |
-    +----+---+                   +----+---+                     +----+---+
-         |                            |             Ping             |
-         |                            | <--------------------------+ |
-         |                            | |                            |
-         |                            | | keepPingOpen               |
-         |                            | |                            |
-         |                            | |         Response           |
-         |                            | v--------------------------> |
-         |                            |                              |
-         |                            |             Ping             |
-         |                            | <--------------------------+ |
-         |                            | |                            |
-         |          Command           | |         Response           |
-         | +------------------------> | v--------------------------> |
-         |          Response        | |                              |
-         | <------------------------v |             Ping             |
-         |                            | <--------------------------+ |
-         |                            | |                            |
-         |                            | | keepPingOpen               |
-         |                            | |                            |
-         |                            | |         Response           |
-         |                            | v--------------------------> |
-         |                            |                              |
-         |                            |                              |
-         +                            +                              +
-
+```
++--------+                   +--------+                     +--------+
+| Client |                   | Public |                     | Hidden |
++----+---+                   +----+---+                     +----+---+
+     |                            |             Ping             |
+     |                            | <--------------------------+ |
+     |                            | |                            |
+     |                            | | keepPingOpen               |
+     |                            | |                            |
+     |                            | |         Response           |
+     |                            | v--------------------------> |
+     |                            |                              |
+     |                            |             Ping             |
+     |                            | <--------------------------+ |
+     |                            | |                            |
+     |          Command           | |         Response           |
+     | +------------------------> | v--------------------------> |
+     |          Response        | |                              |
+     | <------------------------v |             Ping             |
+     |                            | <--------------------------+ |
+     |                            | |                            |
+     |                            | | keepPingOpen               |
+     |                            | |                            |
+     |                            | |         Response           |
+     |                            | v--------------------------> |
+     |                            |                              |
+     |                            |                              |
+     +                            +                              +
+```
 
 
 ###Scenario: no Options
 - `+` Advantage: not many... simple :-) ... no open ports on `public-server`
 - `-` Disadvantage: long, non deterministic command response time / no feedback from hidden-server
 
-
-    +--------+                   +--------+                     +--------+
-    | Client |                   | Public |                     | Hidden |
-    +----+---+                   +----+---+                     +----+---+
-         |                            |             Ping             |
-         |                            | <--------------------------+ | +
-         |                            | v--------------------------> | |
-         |                            |           Response           | | pingInterval
-         |                            |                              | |
-         |                            |                              | v
-         |                            |             Ping             |
-         |                            | <--------------------------+ | +
-         |                            | v--------------------------> | |
-         |          Command           |           Response           | | pingInterval
-         | +------------------------> |                              | |
-         |                          | |                              | v
-         |                          | |             Ping             |
-         |          Response        | | <--------------------------+ | +
-         | <------------------------v | v--------------------------> | |
-         |                            |           Response           | | pingInterval
-         |                            |                              | |
-         |                            |                              | v
-         |                            |                              |
-         |                            |                              |
-         +                            +                              +
-
+```
++--------+                   +--------+                     +--------+
+| Client |                   | Public |                     | Hidden |
++----+---+                   +----+---+                     +----+---+
+     |                            |             Ping             |
+     |                            | <--------------------------+ | +
+     |                            | v--------------------------> | |
+     |                            |           Response           | | pingInterval
+     |                            |                              | |
+     |                            |                              | v
+     |                            |             Ping             |
+     |                            | <--------------------------+ | +
+     |                            | v--------------------------> | |
+     |          Command           |           Response           | | pingInterval
+     | +------------------------> |                              | |
+     |                          | |                              | v
+     |                          | |             Ping             |
+     |          Response        | | <--------------------------+ | +
+     | <------------------------v | v--------------------------> | |
+     |                            |           Response           | | pingInterval
+     |                            |                              | |
+     |                            |                              | v
+     |                            |                              |
+     |                            |                              |
+     +                            +                              +
+```
 
 diagrams created with [asciiflow](http://asciiflow.com/)
 
