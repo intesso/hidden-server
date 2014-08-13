@@ -7,8 +7,20 @@ var public = PublicServer({
   roundTripResponse: true
 });
 
-public.on('command', function(obj) {
-  console.log('command', obj);
+public.on('command', function(message) {
+  console.log('command', message);
+});
+
+public.on('commandResponse', function(message) {
+  console.log('commandResponse', message);
+});
+
+public.on('ping', function(message) {
+  console.log('ping', message);
+});
+
+public.on('pingResponse', function(message) {
+  console.log('pingResponse', message);
 });
 
 public.listen(3000);
