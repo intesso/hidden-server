@@ -41,10 +41,6 @@ describe('options.noOptions.js', function() {
 
 
     /* client */
-    // read the commandline command argument
-    var userArgs = process.argv.slice(2);
-    var command = userArgs[0];
-
     // get url right
     var url = settings.publicServer + settings.commandUri;
     url = url.replace(':hiddenServerName', settings.hiddenServerName);
