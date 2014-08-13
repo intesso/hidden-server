@@ -20,6 +20,13 @@
   "engines": {
     "node": "*"
   },
+  "scripts": {
+    "start": "node ./examples/hidden.js",
+    "hidden": "node ./examples/hidden.js",
+    "public": "node ./examples/public.js",
+    "client": "node ./examples/client.js",
+    "test": "mocha"
+  },
   "dependencies": {
     "express": "~4.2.0",
     "body-parser": "~1.0.0",
