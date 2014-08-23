@@ -1,6 +1,6 @@
 {
   "name": "hidden-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "access server sitting behind firewalls with unknown ip-address via reverse tunnel on demand.",
   "author": "Andi Neck <andi.neck@intesso.com>",
   "contributors": [
@@ -28,12 +28,13 @@
     "test": "mocha"
   },
   "dependencies": {
-    "express": "~4.2.0",
     "body-parser": "~1.0.0",
-    "debug": "~0.7.4",
+    "configurable": "0.0.1",
+    "connect-timeout": "^1.2.2",
     "cuid": "~1.2.4",
-    "superagent": "~0.18.0",
-    "configurable": "0.0.1"
+    "debug": "~0.7.4",
+    "express": "~4.2.0",
+    "superagent": "~0.18.0"
   },
   "devDependencies": {
     "mocha": "~1.21.4",
