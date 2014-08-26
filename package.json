@@ -1,7 +1,7 @@
 {
   "name": "hidden-server",
-  "version": "1.1.3",
-  "description": "access server sitting behind firewalls with unknown ip-address via reverse tunnel on demand.",
+  "version": "2.0.0",
+  "description": "talk to `public-server` in order to execute `client` commands",
   "author": "Andi Neck <andi.neck@intesso.com>",
   "contributors": [
     {
@@ -10,8 +10,6 @@
     }
   ],
   "keywords": [
-    "reverse tunnel",
-    "dynamic tunnel",
     "hidden device",
     "hidden server"
   ],
@@ -21,23 +19,11 @@
     "node": "*"
   },
   "scripts": {
-    "start": "node ./examples/hidden.js",
-    "hidden": "node ./examples/hidden.js",
-    "public": "node ./examples/public.js",
-    "client": "node ./examples/client.js",
-    "test": "mocha"
+    "start": "node ./examples/hidden.js"
   },
   "dependencies": {
-    "body-parser": "~1.0.0",
     "configurable": "0.0.1",
-    "connect-timeout": "^1.2.2",
-    "cuid": "~1.2.4",
     "debug": "~0.7.4",
-    "express": "~4.2.0",
     "superagent": "~0.18.0"
-  },
-  "devDependencies": {
-    "mocha": "~1.21.4",
-    "debug-trace": "~0.2.3"
   }
 }
