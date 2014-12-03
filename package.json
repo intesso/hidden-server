@@ -1,14 +1,12 @@
 {
   "name": "hidden-server",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "talk to `public-server` in order to execute `client` commands",
   "author": "Andi Neck <andi.neck@intesso.com>",
-  "contributors": [
-    {
-      "name": "Andi Neck",
-      "email": "andi.neck@intesso.com"
-    }
-  ],
+  "contributors": [{
+    "name": "Andi Neck",
+    "email": "andi.neck@intesso.com"
+  }],
   "keywords": [
     "hidden device",
     "hidden server"

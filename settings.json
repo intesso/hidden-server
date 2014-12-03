@@ -5,6 +5,7 @@
   "hiddenServerName": "server1",
   "simultaneousPings": 3,
   "pingInterval": 5,
+  "checkInterval": 2,
   "keepPingOpen": true,
   "roundTripResponse": true
 }
